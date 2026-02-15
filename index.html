@@ -1,0 +1,475 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ISP Assistant Pro | Marion County DMH</title>
+    <style>
+      :root {
+        --marion-blue: #003366;
+        --marion-blue-light: #004d99;
+        --gold: #c5a059;
+        --gold-light: #d4b47a;
+        --success: #28a745;
+        --danger: #dc3545;
+        --bg-light: #f4f7f9;
+        --border: #d1d9e0;
+        --text-main: #2c3e50;
+        --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      }
+
+      body {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        background: var(--bg-light);
+        margin: 0;
+        padding: 0;
+        color: var(--text-main);
+        line-height: 1.5;
+      }
+
+      .app-container {
+        display: grid;
+        grid-template-columns: 300px 1fr 300px;
+        height: 100vh;
+        overflow: hidden;
+      }
+
+      /* Sidebar & History Panels */
+      .side-panel {
+        background: white;
+        border-right: 1px solid var(--border);
+        display: flex;
+        flex-direction: column;
+        overflow-y: auto;
+      }
+      .side-panel.right {
+        border-right: none;
+        border-left: 1px solid var(--border);
+      }
+      .panel-header {
+        padding: 20px;
+        background: var(--marion-blue);
+        color: white;
+        font-weight: bold;
+        font-size: 14px;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+      }
+      .panel-content {
+        padding: 15px;
+      }
+
+      /* Resource Buttons */
+      .resource-card {
+        background: var(--bg-light);
+        border: 1px solid var(--border);
+        padding: 12px;
+        border-radius: 8px;
+        margin-bottom: 12px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+      .resource-card:hover {
+        border-color: var(--marion-blue);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+      }
+      .resource-name { font-weight: 700; font-size: 13px; color: var(--marion-blue); display: block; }
+      .resource-info { font-size: 11px; color: #666; margin-top: 4px; display: block; }
+
+      /* History Items */
+      .history-item {
+        padding: 12px;
+        border-bottom: 1px solid #eee;
+        cursor: pointer;
+        transition: background 0.2s;
+        font-size: 12px;
+      }
+      .history-item:hover { background: #f0f7ff; }
+      .history-date { font-size: 10px; color: #999; }
+      .history-title { font-weight: bold; color: var(--marion-blue); display: block; }
+
+      /* Main Workspace */
+      .main-workspace {
+        padding: 40px;
+        overflow-y: auto;
+        background: white;
+      }
+
+      .app-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+        padding-bottom: 20px;
+        border-bottom: 2px solid var(--bg-light);
+      }
+      .app-header h1 { margin: 0; font-size: 24px; color: var(--marion-blue); font-weight: 800; }
+
+      .privacy-banner {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: #e7f3ff;
+        padding: 12px 20px;
+        border-radius: 10px;
+        margin-bottom: 25px;
+        font-size: 13px;
+        font-weight: 600;
+      }
+
+      /* Form Styling */
+      .section-label {
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: #888;
+        font-weight: 800;
+        margin-bottom: 15px;
+        display: block;
+      }
+      .form-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+        margin-bottom: 30px;
+      }
+      .field-group { display: flex; flex-direction: column; }
+      .field-group.full { grid-column: span 3; }
+      label { font-size: 12px; font-weight: 700; margin-bottom: 8px; color: #444; }
+      input, select, textarea {
+        padding: 12px;
+        border: 2px solid #edf2f7;
+        border-radius: 8px;
+        font-size: 14px;
+        transition: border-color 0.2s;
+      }
+      input:focus, select:focus { border-color: var(--marion-blue); outline: none; }
+
+      /* Custom Checkboxes */
+      .checklist {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 15px;
+        background: #fffdf5;
+        padding: 20px;
+        border-radius: 10px;
+        border: 1px solid #ffecb3;
+        margin-bottom: 30px;
+      }
+      .check-item { display: flex; align-items: center; font-size: 12px; font-weight: 600; }
+      .check-item input { width: auto; margin-right: 10px; }
+
+      /* Output Area */
+      .output-section {
+        background: var(--bg-light);
+        padding: 30px;
+        border-radius: 12px;
+        border: 2px dashed var(--border);
+      }
+      #narrativeDisplay {
+        white-space: pre-wrap;
+        font-size: 15px;
+        color: var(--text-main);
+        min-height: 100px;
+        margin-bottom: 25px;
+        font-family: 'Georgia', serif;
+        line-height: 1.8;
+      }
+
+      .btn-bar { display: flex; gap: 12px; }
+      .btn {
+        padding: 12px 24px;
+        border: none;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+      }
+      .btn-primary { background: var(--marion-blue); color: white; }
+      .btn-success { background: var(--success); color: white; }
+      .btn-outline { background: transparent; border: 2px solid var(--border); color: #666; }
+      .btn:hover { opacity: 0.9; transform: translateY(-1px); }
+
+      /* Switch */
+      .switch { position: relative; display: inline-block; width: 44px; height: 22px; }
+      .switch input { opacity: 0; width: 0; height: 0; }
+      .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #cbd5e0; transition: .4s; border-radius: 34px; }
+      input:checked + .slider { background-color: var(--gold); }
+      .slider:before { position: absolute; content: ""; height: 16px; width: 16px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
+      input:checked + .slider:before { transform: translateX(22px); }
+
+      @media print {
+        .side-panel, .btn-bar, .privacy-banner, .checklist, .form-grid, .osha-panel, .app-header { display: none !important; }
+        .main-workspace { padding: 0; width: 100%; }
+        .output-section { border: none; background: white; padding: 0; }
+        #narrativeDisplay { font-size: 12pt; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app-container">
+      <!-- Left Sidebar: Resources -->
+      <aside class="side-panel">
+        <div class="panel-header">Marion County Resources</div>
+        <div class="panel-content" id="resourceList">
+          <!-- Populated by JS -->
+        </div>
+      </aside>
+
+      <!-- Center: Editor -->
+      <main class="main-workspace">
+        <div class="app-header">
+          <h1>ISP Assistant <span style="font-weight: 300; color: var(--gold);">Pro</span></h1>
+          <div class="btn-bar">
+            <button class="btn btn-outline" onclick="resetForm()">Reset Form</button>
+          </div>
+        </div>
+
+        <div class="privacy-banner">
+          <span>🔒 HIPAA PRIVACY MODE: [ON] Mask sensitive data while drafting.</span>
+          <label class="switch">
+            <input type="checkbox" id="privacyToggle" checked onchange="updateUI()">
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <span class="section-label">1. Core ISP Logic</span>
+        <div class="form-grid">
+          <div class="field-group">
+            <label>Individual Name/Initials</label>
+            <input type="text" id="clientName" placeholder="For clinical record..." oninput="updateUI()">
+          </div>
+          <div class="field-group">
+            <label>Outcome Domain</label>
+            <select id="domain" onchange="loadTemplates()">
+              <option value="">-- Select --</option>
+              <option value="Safety">Safety & Security</option>
+              <option value="Daily">Daily Life & Employment</option>
+              <option value="Community">Community Living</option>
+              <option value="Health">Healthy Living</option>
+            </select>
+          </div>
+          <div class="field-group">
+            <label>Frequency</label>
+            <input type="text" id="frequency" placeholder="e.g. 3x weekly" oninput="updateUI()">
+          </div>
+          <div class="field-group">
+            <label>Support Method</label>
+            <select id="verb" onchange="updateUI()">
+              <option value="instructional support to learn how to">Instructional (Teaching)</option>
+              <option value="maintenance support to continue to">Maintenance (Sharpness)</option>
+              <option value="physical and direct support to">Physical/Direct (Hands-on)</option>
+              <option value="modeling and demonstration to">Model (Show/Tell)</option>
+              <option value="verbal prompts and cues to">Prompt (Reminders)</option>
+            </select>
+          </div>
+          <div class="field-group full">
+            <label>Goal Starter (Clinical Building Blocks)</label>
+            <select id="goalTemplate" onchange="updateUI()"></select>
+          </div>
+        </div>
+
+        <span class="section-label">2. OSHA & Risk Assessment</span>
+        <div class="form-grid">
+          <div class="field-group">
+            <label>Provider Risk Level</label>
+            <select id="riskLevel" onchange="updateUI()">
+              <option value="Low (Routine)">Low Risk</option>
+              <option value="Moderate (Community)">Moderate Risk</option>
+              <option value="High (Behavioral)">High Risk</option>
+            </select>
+          </div>
+          <div class="field-group full" style="grid-column: span 2;">
+            <label>Staff Precaution (OSHA 3148 Compliance)</label>
+            <select id="oshaPrecaution" onchange="updateUI()">
+              <option value="Standard universal precautions apply.">Standard Precautions</option>
+              <option value="Two-staff escort required for all community outings.">2-Staff Escort Protocol</option>
+              <option value="Staff to maintain clear path to exit at all times.">Environmental Awareness</option>
+              <option value="Staff to utilize de-escalation techniques (Mandt/NCI).">De-escalation Protocol</option>
+            </select>
+          </div>
+        </div>
+
+        <span class="section-label">3. Audit Compliance</span>
+        <div class="checklist">
+          <div class="check-item"><input type="checkbox"> Person-Centered</div>
+          <div class="check-item"><input type="checkbox"> Measurable</div>
+          <div class="check-item"><input type="checkbox"> Clinical Tone</div>
+        </div>
+
+        <div class="output-section">
+          <div id="narrativeDisplay">Complete the fields above to generate your ISP narrative...</div>
+          <div class="btn-bar">
+            <button class="btn btn-primary" onclick="copyToClipboard()">
+              <span>📋</span> Copy Narrative
+            </button>
+            <button class="btn btn-success" onclick="window.print()">
+              <span>🖨️</span> Print / Save PDF
+            </button>
+            <button class="btn btn-outline" onclick="saveToHistory()">
+              <span>💾</span> Save to History
+            </button>
+          </div>
+        </div>
+      </main>
+
+      <!-- Right Sidebar: History -->
+      <aside class="side-panel right">
+        <div class="panel-header">Local Draft History</div>
+        <div class="panel-content" id="historyList">
+          <!-- Populated by JS -->
+        </div>
+      </aside>
+    </div>
+
+    <script>
+      const data = {
+        Safety: [
+          "demonstrate 2 ways to exit the home during a drill",
+          "identify 'safe strangers' in the Hannibal community",
+          "exit the home and meet staff at the designated 'Safety Spot' within 2 minutes of a smoke alarm",
+          "demonstrate the ability to call 911 and provide their home address in response to a simulated emergency",
+          "utilize a 'Safety Tool' (e.g., cell phone or contact card) to reach a support person",
+          "independently identify 2 exits in any community building"
+        ],
+        Daily: [
+          "identify 3 local businesses of interest for future employment",
+          "participate in their annual ISP meeting and express 1 choice",
+          "review their monthly ledger with staff assistance to ensure bills are paid",
+          "practice 3 interview questions with staff for vocational opportunities",
+          "lead at least one section of their ISP meeting"
+        ],
+        Community: [
+          "initiate 1 conversation with a peer during a community outing",
+          "navigate to 2 locations in Hannibal (e.g., Library, Admiral Coontz Center)",
+          "use OATS transit to attend a local social event",
+          "participate in 1 volunteer activity at a Marion County park"
+        ],
+        Health: [
+          "choose a healthy snack option with 1 verbal prompt",
+          "participate in 20 minutes of physical activity (e.g., walking at Riverview Park)",
+          "identify the name and purpose of their morning medications",
+          "assist in the preparation of one healthy meal per week"
+        ],
+      };
+
+      const resources = [
+        { name: "Mark Twain Behavioral Health", info: "Crisis: (800) 356-5395", contact: "Hannibal Office" },
+        { name: "Douglass Community Services", info: "Food/Utility Assistance", contact: "573-221-3892" },
+        { name: "OATS Transit", info: "Transportation Marion Co.", contact: "800-269-6287" },
+        { name: "NECAC Marion County", info: "Housing & Support", contact: "573-221-7166" }
+      ];
+
+      function init() {
+        renderResources();
+        renderHistory();
+        loadTemplates();
+      }
+
+      function renderResources() {
+        const container = document.getElementById('resourceList');
+        container.innerHTML = resources.map(res => `
+          <div class="resource-card" onclick="injectResource('${res.name}')">
+            <span class="resource-name">${res.name}</span>
+            <span class="resource-info">${res.info} | ${res.contact}</span>
+          </div>
+        `).join('');
+      }
+
+      function loadTemplates() {
+        const d = document.getElementById("domain").value;
+        const selector = document.getElementById("goalTemplate");
+        selector.innerHTML = d ? data[d].map(item => `<option value="${item}">${item}</option>`).join('') : '<option>-- Select Domain First --</option>';
+        updateUI();
+      }
+
+      function updateUI() {
+        const rawName = document.getElementById("clientName").value || "The individual";
+        const isPrivacyOn = document.getElementById("privacyToggle").checked;
+        const name = isPrivacyOn ? "[INDIVIDUAL]" : rawName;
+        
+        const verb = document.getElementById("verb").value;
+        const goal = document.getElementById("goalTemplate").value;
+        const freq = document.getElementById("frequency").value || "[FREQUENCY]";
+        
+        const risk = document.getElementById("riskLevel").value;
+        const precaution = document.getElementById("oshaPrecaution").value;
+        
+        if(!document.getElementById("domain").value) {
+            document.getElementById("narrativeDisplay").innerText = "Complete the fields above to generate your ISP narrative...";
+            return;
+        }
+
+        const text = `OUTCOME NARRATIVE:\n${name} will receive ${verb} ${goal}. This progress will be monitored ${freq} to ensure clinical compliance and outcome success. Progress will be documented in Provider Monthly Reports and reviewed by the Service Coordinator during quarterly visits.\n\nSTAFF SAFETY (OSHA 3148 / PROVIDER RISK):\nRisk level is assessed as ${risk}. ${precaution}`;
+        
+        document.getElementById("narrativeDisplay").innerText = text;
+      }
+
+      function injectResource(res) {
+        const display = document.getElementById("narrativeDisplay");
+        if(display.innerText.includes("Complete the fields")) return;
+        display.innerText += `\n\nREFERRAL NOTE: Collaboration with ${res} will be facilitated as part of this outcome.`;
+      }
+
+      function resetForm() {
+        if(confirm("Are you sure you want to clear all fields?")) {
+            document.getElementById("clientName").value = "";
+            document.getElementById("domain").value = "";
+            document.getElementById("frequency").value = "";
+            loadTemplates();
+        }
+      }
+
+      function copyToClipboard() {
+        const text = document.getElementById("narrativeDisplay").innerText;
+        navigator.clipboard.writeText(text);
+        const btn = document.querySelector('.btn-primary span');
+        btn.innerText = "✅";
+        setTimeout(() => btn.innerText = "📋", 2000);
+      }
+
+      function saveToHistory() {
+        const text = document.getElementById("narrativeDisplay").innerText;
+        if(text.includes("Complete the fields")) return;
+        
+        const history = JSON.parse(localStorage.getItem('isp_history') || '[]');
+        history.unshift({
+            id: Date.now(),
+            date: new Date().toLocaleString(),
+            title: document.getElementById("clientName").value || "Unnamed Draft",
+            text: text
+        });
+        localStorage.setItem('isp_history', JSON.stringify(history.slice(0, 20)));
+        renderHistory();
+      }
+
+      function renderHistory() {
+        const history = JSON.parse(localStorage.getItem('isp_history') || '[]');
+        const container = document.getElementById('historyList');
+        container.innerHTML = history.map(item => `
+          <div class="history-item" onclick="loadHistoryItem(${item.id})">
+            <span class="history-title">${item.title}</span>
+            <span class="history-date">${item.date}</span>
+          </div>
+        `).join('');
+      }
+
+      function loadHistoryItem(id) {
+        const history = JSON.parse(localStorage.getItem('isp_history') || '[]');
+        const item = history.find(h => h.id === id);
+        if(item) {
+            document.getElementById("narrativeDisplay").innerText = item.text;
+            alert("Draft loaded into preview area.");
+        }
+      }
+
+      init();
+    </script>
+  </body>
+</html>
