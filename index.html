@@ -32,6 +32,7 @@
         grid-template-columns: 300px 1fr 300px;
         height: 100vh;
         overflow: hidden;
+        transition: grid-template-columns 0.3s ease;
       }
 
       /* Sidebar & History Panels */
@@ -41,6 +42,8 @@
         display: flex;
         flex-direction: column;
         overflow-y: auto;
+        transition: transform 0.3s ease, width 0.3s ease;
+        z-index: 1000;
       }
       .side-panel.right {
         border-right: none;
@@ -103,8 +106,26 @@
         margin-bottom: 30px;
         padding-bottom: 20px;
         border-bottom: 2px solid var(--bg-light);
+        gap: 15px;
       }
+      .header-left { display: flex; align-items: center; gap: 15px; }
       .app-header h1 { margin: 0; font-size: 24px; color: var(--marion-blue); font-weight: 800; }
+
+      /* Hamburger Menu Styling */
+      .menu-btn {
+        background: transparent;
+        border: none;
+        color: var(--marion-blue);
+        font-size: 24px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 8px;
+        border-radius: 6px;
+        transition: background 0.2s;
+      }
+      .menu-btn:hover { background: #f0f4f8; }
 
       .privacy-banner {
         display: flex;
@@ -204,74 +225,62 @@
       .slider:before { position: absolute; content: ""; height: 16px; width: 16px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
       input:checked + .slider:before { transform: translateX(22px); }
 
-      /* Desktop Scaling (Laptops) */
-      @media (max-width: 1400px) {
-        .app-container { grid-template-columns: 250px 1fr 250px; }
+      /* Desktop Scaling & Toggle */
+      .app-container.sidebar-collapsed {
+        grid-template-columns: 0px 1fr 300px;
+      }
+      .app-container.sidebar-collapsed .side-panel:first-child {
+        transform: translateX(-100%);
+        visibility: hidden;
       }
 
-      /* Tablet Scaling (iPad/Surface) */
+      /* Tablet/Mobile Scaling */
       @media (max-width: 1024px) {
         .app-container {
-          grid-template-columns: 250px 1fr;
-          height: auto;
-          overflow: auto;
+          grid-template-columns: 0px 1fr;
         }
-        .side-panel.right {
-          grid-column: span 2;
-          border-left: none;
-          border-top: 1px solid var(--border);
-          height: 300px;
+        .app-container.sidebar-collapsed {
+          grid-template-columns: 0px 1fr;
         }
+        .side-panel:first-child {
+          position: fixed;
+          top: 0; left: 0; bottom: 0;
+          width: 280px;
+          transform: translateX(-100%);
+          visibility: hidden;
+          box-shadow: 4px 0 15px rgba(0,0,0,0.1);
+        }
+        .sidebar-active .side-panel:first-child {
+          transform: translateX(0);
+          visibility: visible;
+        }
+        .side-panel.right { display: none; }
         .form-grid { grid-template-columns: 1fr 1fr; }
       }
 
-      /* Mobile Scaling (Phones) */
       @media (max-width: 768px) {
-        .app-container {
-          grid-template-columns: 1fr;
-          height: auto;
-          overflow: auto;
-        }
-        .side-panel {
-          border-right: none;
-          border-bottom: 1px solid var(--border);
-          height: auto;
-          max-height: 400px;
-        }
-        .side-panel.right {
-          grid-column: span 1;
-          height: auto;
-          max-height: 400px;
-        }
-        .main-workspace {
-          padding: 20px;
-        }
-        .app-header {
-          flex-direction: column;
-          align-items: flex-start;
-          gap: 15px;
-        }
-        .form-grid {
-          grid-template-columns: 1fr;
-          gap: 15px;
-        }
+        .main-workspace { padding: 20px; }
+        .app-header { flex-direction: column; align-items: flex-start; }
+        .form-grid { grid-template-columns: 1fr; }
         .field-group.full { grid-column: span 1; }
-        .checklist {
-          grid-template-columns: 1fr;
-        }
-        .btn-bar {
-          flex-direction: column;
-        }
-        .btn { width: 100%; }
-        .privacy-banner {
-          flex-direction: column;
-          text-align: center;
-          gap: 10px;
-        }
+        .checklist { grid-template-columns: 1fr; }
+        .btn-bar { flex-direction: column; }
+        .privacy-banner { flex-direction: column; gap: 10px; text-align: center; }
+        .side-panel:first-child { width: 85%; }
       }
 
+      /* Overlay */
+      .sidebar-overlay {
+        display: none;
+        position: fixed;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: rgba(0,0,0,0.3);
+        z-index: 999;
+      }
+      .sidebar-active .sidebar-overlay { display: block; }
+
       @media print {
-        .side-panel, .btn-bar, .privacy-banner, .checklist, .form-grid, .osha-panel, .app-header { display: none !important; }
+        .side-panel, .btn-bar, .privacy-banner, .checklist, .form-grid, .osha-panel, .app-header, .sidebar-overlay { display: none !important; }
         .main-workspace { padding: 0; width: 100%; }
         .output-section { border: none; background: white; padding: 0; }
         #narrativeDisplay { font-size: 12pt; }
@@ -279,7 +288,8 @@
     </style>
   </head>
   <body>
-    <div class="app-container">
+    <div class="sidebar-overlay" onclick="toggleSidebar()"></div>
+    <div class="app-container" id="appContainer">
       <!-- Left Sidebar: Resources -->
       <aside class="side-panel">
         <div class="panel-header">Marion County Resources</div>
@@ -291,7 +301,10 @@
       <!-- Center: Editor -->
       <main class="main-workspace">
         <div class="app-header">
-          <h1>ISP Assistant <span style="font-weight: 300; color: var(--gold);">Pro</span></h1>
+          <div class="header-left">
+            <button class="menu-btn" onclick="toggleSidebar()" title="Toggle Resources">☰</button>
+            <h1>ISP Assistant <span style="font-weight: 300; color: var(--gold);">Pro</span></h1>
+          </div>
           <div class="btn-bar">
             <button class="btn btn-outline" onclick="resetForm()">Reset Form</button>
           </div>
@@ -438,6 +451,17 @@
         loadTemplates();
       }
 
+      function toggleSidebar() {
+        const container = document.getElementById('appContainer');
+        const isMobile = window.innerWidth <= 1024;
+        
+        if (isMobile) {
+          document.body.classList.toggle('sidebar-active');
+        } else {
+          container.classList.toggle('sidebar-collapsed');
+        }
+      }
+
       function renderResources() {
         const container = document.getElementById('resourceList');
         container.innerHTML = resources.map(res => `
@@ -481,6 +505,7 @@
         const display = document.getElementById("narrativeDisplay");
         if(display.innerText.includes("Complete the fields")) return;
         display.innerText += `\n\nREFERRAL NOTE: Collaboration with ${res} will be facilitated as part of this outcome.`;
+        if(window.innerWidth <= 1024) toggleSidebar();
       }
 
       function resetForm() {
