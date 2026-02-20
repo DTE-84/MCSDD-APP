@@ -60,28 +60,82 @@ const resources = [
 
 // ── All form field IDs (used for save/restore) ──
 const FORM_FIELDS = [
-  "clientName", "clientNickname", "clientDOB", "dmhID", "coordinator",
-  "officeType", "maritalStatus", "voterStatus", "religion", "religionOther",
-  "nativeLanguage", "otherLanguages", "commMethod",
-  "insurance", "spenddownAmount", "privateInsuranceProvider",
-  "dentalInsurance", "dentalOther",
-  "residencyType", "residenceNotes",
-  "schoolName", "educationStatus", "gradYear",
-  "employmentStatus", "employmentJob",
-  "ispDate", "moediDate", "cimorDate", "lastAssessment", "lastLOC", "rasSisScore",
-  "aspirations", "prevGoals", "strengths", "techHelpers", "relationships",
-  "communityResources", "medSupport", "riskLevel", "supervisionLevel",
-  "behavioralStatus", "oshaPrecaution", "evacPlan", "legalStatus",
-  "rightsBrochure", "consents", "serviceSatisfaction", "conflictInfo",
-  "contributors", "participation", "scFrequency", "payeeInfo", "burialInfo",
-  "domain", "verb", "frequency", "goalTemplate",
+  "clientName",
+  "clientNickname",
+  "clientDOB",
+  "dmhID",
+  "coordinator",
+  "officeType",
+  "maritalStatus",
+  "voterStatus",
+  "religion",
+  "religionOther",
+  "nativeLanguage",
+  "otherLanguages",
+  "commMethod",
+  "insurance",
+  "spenddownAmount",
+  "privateInsuranceProvider",
+  "dentalInsurance",
+  "dentalOther",
+  "residencyType",
+  "residenceNotes",
+  "schoolName",
+  "educationStatus",
+  "gradYear",
+  "employmentStatus",
+  "employmentJob",
+  "ispDate",
+  "moediDate",
+  "cimorDate",
+  "lastAssessment",
+  "lastLOC",
+  "rasSisScore",
+  "aspirations",
+  "prevGoals",
+  "strengths",
+  "techHelpers",
+  "relationships",
+  "communityResources",
+  "medSupport",
+  "riskLevel",
+  "supervisionLevel",
+  "behavioralStatus",
+  "oshaPrecaution",
+  "evacPlan",
+  "legalStatus",
+  "rightsBrochure",
+  "consents",
+  "serviceSatisfaction",
+  "conflictInfo",
+  "contributors",
+  "participation",
+  "scFrequency",
+  "payeeInfo",
+  "burialInfo",
+  "domain",
+  "verb",
+  "frequency",
+  "goalTemplate",
   "ethnicityOther",
   // Communication Section
-  "commPrimaryLanguage", "commUsesSignLang", "commSignLangType", "commSignLangTypeOther",
-  "commMethodOther", "commMethodNotes", "commEvalNeeded", "commEvalWhyNot", "commEvalBarriers",
+  "commPrimaryLanguage",
+  "commUsesSignLang",
+  "commSignLangType",
+  "commSignLangTypeOther",
+  "commMethodOther",
+  "commMethodNotes",
+  "commEvalNeeded",
+  "commEvalWhyNot",
+  "commEvalBarriers",
   // Likes & Dislikes
-  "likesActivities", "likesFoods", "likesPlaces", "likesOther",
-  "dislikesActivities", "dislikesFoods", "dislikesOther",
+  "likesActivities",
+  "likesFoods",
+  "likesPlaces",
+  "likesOther",
+  "dislikesActivities",
+  "dislikesFoods",
+  "dislikesOther",
 ];
 
 // ─────────────────────────────────────────────
@@ -89,21 +143,29 @@ const FORM_FIELDS = [
 // ─────────────────────────────────────────────
 function toggleSignLangType() {
   const val = document.getElementById("commUsesSignLang").value;
-  document.getElementById("signLangTypeGroup").style.display = val === "Yes" ? "" : "none";
-  if (val !== "Yes") document.getElementById("signLangTypeOtherGroup").style.display = "none";
+  document.getElementById("signLangTypeGroup").style.display =
+    val === "Yes" ? "" : "none";
+  if (val !== "Yes")
+    document.getElementById("signLangTypeOtherGroup").style.display = "none";
 }
 function toggleSignLangTypeOther() {
   const val = document.getElementById("commSignLangType").value;
-  document.getElementById("signLangTypeOtherGroup").style.display = val === "Other" ? "" : "none";
+  document.getElementById("signLangTypeOtherGroup").style.display =
+    val === "Other" ? "" : "none";
 }
 function toggleCommEvalFields() {
   const val = document.getElementById("commEvalNeeded").value;
-  document.getElementById("commEvalWhyNotGroup").style.display = val === "No — Not Needed" ? "" : "none";
+  document.getElementById("commEvalWhyNotGroup").style.display =
+    val === "No — Not Needed" ? "" : "none";
   document.getElementById("commEvalBarriersGroup").style.display =
-    (val === "Yes — Evaluation(s) Needed" || val === "No — Not Needed") ? "" : "none";
+    val === "Yes — Evaluation(s) Needed" || val === "No — Not Needed"
+      ? ""
+      : "none";
 }
 function toggleCommMethodOther(cb) {
-  document.getElementById("commMethodOtherGroup").style.display = cb.checked ? "" : "none";
+  document.getElementById("commMethodOtherGroup").style.display = cb.checked
+    ? ""
+    : "none";
   updateUI();
 }
 function toggleNAField(fieldId, cbId) {
@@ -151,24 +213,32 @@ function renderCommChart() {
       <div style="font-size:11px;font-weight:700;color:#666;text-transform:uppercase;padding:0 4px;">How Staff Should Respond</div>
       <div></div>
     </div>
-    ${commChartRows.map((row, i) => `
+    ${commChartRows
+      .map(
+        (row, i) => `
       <div style="display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:8px;margin-bottom:8px;align-items:start;">
         <textarea style="min-height:60px;" placeholder="e.g. Pulls on sleeve" oninput="updateCommRow(${i},'situation',this.value)">${row.situation}</textarea>
         <textarea style="min-height:60px;" placeholder="e.g. Needs to use restroom" oninput="updateCommRow(${i},'meaning',this.value)">${row.meaning}</textarea>
         <textarea style="min-height:60px;" placeholder="e.g. Immediately escort to restroom" oninput="updateCommRow(${i},'response',this.value)">${row.response}</textarea>
         <button class="remove-rep-btn" onclick="removeCommChartRow(${i})" title="Remove row" style="margin-top:6px;">✕</button>
       </div>
-    `).join("")}
+    `,
+      )
+      .join("")}
   `;
 }
 
 function getCommMethodsSelected() {
-  const boxes = document.querySelectorAll("#commMethodGrid input[type=checkbox]");
+  const boxes = document.querySelectorAll(
+    "#commMethodGrid input[type=checkbox]",
+  );
   const selected = [];
-  boxes.forEach(cb => {
+  boxes.forEach((cb) => {
     if (cb.checked) {
       if (cb.value === "Other Communication Method") {
-        const other = document.getElementById("commMethodOther") ? document.getElementById("commMethodOther").value.trim() : "";
+        const other = document.getElementById("commMethodOther")
+          ? document.getElementById("commMethodOther").value.trim()
+          : "";
         selected.push(other ? `Other (${other})` : "Other");
       } else {
         selected.push(cb.value);
@@ -180,9 +250,12 @@ function getCommMethodsSelected() {
 
 function getCommChartNarrative() {
   if (!commChartRows.length) return "  No communication chart entries on file.";
-  return commChartRows.map((row, i) =>
-    `  Entry ${i+1}: "${row.situation || "N/A"}" -> Meaning: "${row.meaning || "N/A"}" -> Staff Response: "${row.response || "N/A"}"`
-  ).join("\n");
+  return commChartRows
+    .map(
+      (row, i) =>
+        `  Entry ${i + 1}: "${row.situation || "N/A"}" -> Meaning: "${row.meaning || "N/A"}" -> Staff Response: "${row.response || "N/A"}"`,
+    )
+    .join("\n");
 }
 
 // ─────────────────────────────────────────────
@@ -191,7 +264,11 @@ function getCommChartNarrative() {
 let importantPeople = [];
 
 function addImportantPerson() {
-  importantPeople.push({ name: "", relationship: "", activities: [{ what: "", frequency: "" }] });
+  importantPeople.push({
+    name: "",
+    relationship: "",
+    activities: [{ what: "", frequency: "" }],
+  });
   renderImportantPeople();
   updateUI();
 }
@@ -218,7 +295,8 @@ function updatePerson(personIdx, field, value) {
   const headers = document.querySelectorAll(".person-header-title");
   if (headers[personIdx]) {
     const p = importantPeople[personIdx];
-    headers[personIdx].textContent = `Person #${personIdx + 1}${p.name ? " — " + p.name : ""}${p.relationship ? " (" + p.relationship + ")" : ""}`;
+    headers[personIdx].textContent =
+      `Person #${personIdx + 1}${p.name ? " — " + p.name : ""}${p.relationship ? " (" + p.relationship + ")" : ""}`;
   }
   updateUI();
 }
@@ -234,10 +312,12 @@ function renderImportantPeople() {
     container.innerHTML = `<p style="font-size:12px;color:#999;margin:8px 0 12px;">No people added yet. Click below to add someone important to this individual.</p>`;
     return;
   }
-  container.innerHTML = importantPeople.map((person, i) => `
+  container.innerHTML = importantPeople
+    .map(
+      (person, i) => `
     <div class="legal-rep-card" style="margin-bottom:16px;">
       <div class="rep-header">
-        <span class="rep-title person-header-title">Person #${i+1}${person.name ? " \u2014 " + person.name : ""}${person.relationship ? " (" + person.relationship + ")" : ""}</span>
+        <span class="rep-title person-header-title">Person #${i + 1}${person.name ? " \u2014 " + person.name : ""}${person.relationship ? " (" + person.relationship + ")" : ""}</span>
         <button class="remove-rep-btn" onclick="removeImportantPerson(${i})" title="Remove">&#10005;</button>
       </div>
       <div class="form-grid" style="margin-bottom:12px;">
@@ -258,7 +338,9 @@ function renderImportantPeople() {
         <div style="font-size:11px;font-weight:700;color:#666;text-transform:uppercase;">How Often</div>
         <div></div>
       </div>
-      ${person.activities.map((act, j) => `
+      ${person.activities
+        .map(
+          (act, j) => `
         <div style="display:grid;grid-template-columns:1fr 200px auto;gap:8px;margin-bottom:8px;align-items:center;">
           <input type="text" value="${act.what}" placeholder="e.g. Going to church, watching movies, fishing..."
             oninput="updatePersonActivity(${i},${j},'what',this.value)" />
@@ -267,24 +349,31 @@ function renderImportantPeople() {
           <button class="remove-rep-btn" onclick="removePersonActivity(${i},${j})" title="Remove activity"
             ${person.activities.length === 1 ? 'style="opacity:0.3;pointer-events:none;"' : ""}>&#10005;</button>
         </div>
-      `).join("")}
+      `,
+        )
+        .join("")}
       <button class="btn btn-outline" type="button" onclick="addPersonActivity(${i})"
         style="font-size:12px;padding:6px 14px;margin-top:4px;">+ Add Another Activity</button>
     </div>
-  `).join("");
+  `,
+    )
+    .join("");
 }
 
 function getImportantPeopleNarrative() {
-  if (!importantPeople.length) return "No important people documented at this time.";
-  return importantPeople.map((p, i) => {
-    const name = p.name || `[Person ${i+1}]`;
-    const rel = p.relationship || "Relationship not specified";
-    const acts = p.activities
-      .filter(a => a.what)
-      .map(a => `${a.what}${a.frequency ? " (" + a.frequency + ")" : ""}`)
-      .join("; ");
-    return `  ${name} (${rel}): ${acts || "No activities listed"}`;
-  }).join("\n");
+  if (!importantPeople.length)
+    return "No important people documented at this time.";
+  return importantPeople
+    .map((p, i) => {
+      const name = p.name || `[Person ${i + 1}]`;
+      const rel = p.relationship || "Relationship not specified";
+      const acts = p.activities
+        .filter((a) => a.what)
+        .map((a) => `${a.what}${a.frequency ? " (" + a.frequency + ")" : ""}`)
+        .join("; ");
+      return `  ${name} (${rel}): ${acts || "No activities listed"}`;
+    })
+    .join("\n");
 }
 
 // ── Initialise App ──
@@ -308,8 +397,9 @@ function toggleReligionOther() {
 
 // ── Ethnicity "Other" toggle ──
 function toggleEthnicityOther(cb) {
-  document.getElementById("ethnicityOtherGroup").style.display =
-    cb.checked ? "" : "none";
+  document.getElementById("ethnicityOtherGroup").style.display = cb.checked
+    ? ""
+    : "none";
   updateUI();
 }
 
@@ -333,7 +423,9 @@ function toggleDentalOther() {
 
 // ── Get selected ethnicities ──
 function getEthnicities() {
-  const boxes = document.querySelectorAll("#ethnicityGrid input[type=checkbox]");
+  const boxes = document.querySelectorAll(
+    "#ethnicityGrid input[type=checkbox]",
+  );
   const selected = [];
   boxes.forEach((cb) => {
     if (cb.checked) {
@@ -418,8 +510,12 @@ function renderLegalReps() {
 
 function addLegalRep() {
   legalReps.push({
-    name: "", relationship: "", legalType: "Full Guardianship",
-    livesWith: "Yes", phone: "", address: "",
+    name: "",
+    relationship: "",
+    legalType: "Full Guardianship",
+    livesWith: "Yes",
+    phone: "",
+    address: "",
   });
   renderLegalReps();
   updateUI();
@@ -436,7 +532,8 @@ function updateRep(i, field, value) {
   // Re-render header title only, not full re-render (avoid losing focus)
   const titles = document.querySelectorAll(".rep-title");
   if (titles[i]) {
-    titles[i].textContent = `Representative #${i + 1}${legalReps[i].name ? " — " + legalReps[i].name : ""}`;
+    titles[i].textContent =
+      `Representative #${i + 1}${legalReps[i].name ? " — " + legalReps[i].name : ""}`;
   }
   updateUI();
 }
@@ -506,7 +603,9 @@ function updateUI() {
 
   // Update sticky header
   const displayHeaderName = name
-    ? nickname ? `${name} ("${nickname}")` : name
+    ? nickname
+      ? `${name} ("${nickname}")`
+      : name
     : "No Individual Selected";
   document.getElementById("headerName").textContent = displayHeaderName;
   document.getElementById("headerDOB").textContent = dob
@@ -518,7 +617,9 @@ function updateUI() {
   const displayName = isPrivacyOn
     ? "[INDIVIDUAL]"
     : name
-      ? nickname ? `${name} ("${nickname}")` : name
+      ? nickname
+        ? `${name} ("${nickname}")`
+        : name
       : "[NAME]";
   const displayDOB = isPrivacyOn
     ? "[MM/DD/YYYY]"
@@ -538,9 +639,10 @@ function updateUI() {
   text += `Name: ${displayName} | DOB: ${displayDOB} | DMH ID: ${displayDMH}\n`;
   text += `TCM Agency: ${getVal("coordinator") || "N/A"} | Office Type: ${getVal("officeType") || "N/A"}\n`;
   text += `Marital Status: ${getVal("maritalStatus") || "N/A"} | Voter Status: ${getVal("voterStatus") || "N/A"}\n`;
-  const religionVal = getVal("religion") === "Other"
-    ? `Other — ${getVal("religionOther") || "not specified"}`
-    : (getVal("religion") || "N/A");
+  const religionVal =
+    getVal("religion") === "Other"
+      ? `Other — ${getVal("religionOther") || "not specified"}`
+      : getVal("religion") || "N/A";
   text += `Religion: ${religionVal}\n`;
   text += `Ethnicity / Race: ${getEthnicities()}\n\n`;
 
@@ -550,19 +652,27 @@ function updateUI() {
 
   text += `INSURANCE & BENEFITS\n`;
   let insuranceStr = getVal("insurance") || "N/A";
-  if (getVal("insurance") === "Medicaid — Spend Down" && getVal("spenddownAmount"))
+  if (
+    getVal("insurance") === "Medicaid — Spend Down" &&
+    getVal("spenddownAmount")
+  )
     insuranceStr += ` (Spend Down: ${getVal("spenddownAmount")})`;
-  if (getVal("insurance") === "Private Insurance" && getVal("privateInsuranceProvider"))
+  if (
+    getVal("insurance") === "Private Insurance" &&
+    getVal("privateInsuranceProvider")
+  )
     insuranceStr += ` — Provider: ${getVal("privateInsuranceProvider")}`;
   text += `Medical: ${insuranceStr}\n`;
-  const dentalStr = getVal("dentalInsurance") === "Other"
-    ? `Other — ${getVal("dentalOther") || "not specified"}`
-    : (getVal("dentalInsurance") || "N/A");
+  const dentalStr =
+    getVal("dentalInsurance") === "Other"
+      ? `Other — ${getVal("dentalOther") || "not specified"}`
+      : getVal("dentalInsurance") || "N/A";
   text += `Dental: ${dentalStr}\n\n`;
 
   text += `RESIDENCY\n`;
   text += `Setting: ${getVal("residencyType") || "N/A"}\n`;
-  if (getVal("residenceNotes")) text += `Location Notes: ${getVal("residenceNotes")}\n`;
+  if (getVal("residenceNotes"))
+    text += `Location Notes: ${getVal("residenceNotes")}\n`;
   text += `\n`;
 
   text += `LEGAL REPRESENTATIVES / GUARDIANS / CUSTODIANS\n`;
@@ -585,41 +695,72 @@ function updateUI() {
 
   text += `2. COMMUNICATION — WHAT WE NEED TO KNOW TO SUPPORT THE INDIVIDUAL\n`;
   text += `───────────────────────────────────────────────────────────────────\n\n`;
-  const primLang = document.getElementById("commPrimaryLanguage") ? document.getElementById("commPrimaryLanguage").value || "N/A" : "N/A";
-  const usesSign = document.getElementById("commUsesSignLang") ? document.getElementById("commUsesSignLang").value : "No";
+  const primLang = document.getElementById("commPrimaryLanguage")
+    ? document.getElementById("commPrimaryLanguage").value || "N/A"
+    : "N/A";
+  const usesSign = document.getElementById("commUsesSignLang")
+    ? document.getElementById("commUsesSignLang").value
+    : "No";
   let signLangStr = "No";
   if (usesSign === "Yes") {
-    const signType = document.getElementById("commSignLangType") ? document.getElementById("commSignLangType").value : "";
-    const signOther = document.getElementById("commSignLangTypeOther") ? document.getElementById("commSignLangTypeOther").value : "";
-    signLangStr = "Yes — " + (signType === "Other" ? (signOther || "Other") : signType);
+    const signType = document.getElementById("commSignLangType")
+      ? document.getElementById("commSignLangType").value
+      : "";
+    const signOther = document.getElementById("commSignLangTypeOther")
+      ? document.getElementById("commSignLangTypeOther").value
+      : "";
+    signLangStr =
+      "Yes — " + (signType === "Other" ? signOther || "Other" : signType);
   } else if (usesSign === "N/A") {
     signLangStr = "N/A";
   }
   text += `Primary Language: ${primLang} | Uses Sign Language: ${signLangStr}\n`;
   text += `Communication Method(s): ${getCommMethodsSelected()}\n`;
-  const commNotes = document.getElementById("commMethodNotes") ? document.getElementById("commMethodNotes").value : "";
+  const commNotes = document.getElementById("commMethodNotes")
+    ? document.getElementById("commMethodNotes").value
+    : "";
   if (commNotes) text += `Communication Notes: ${commNotes}\n`;
-  const evalNeeded = document.getElementById("commEvalNeeded") ? document.getElementById("commEvalNeeded").value : "N/A";
+  const evalNeeded = document.getElementById("commEvalNeeded")
+    ? document.getElementById("commEvalNeeded").value
+    : "N/A";
   text += `Evaluation Needed: ${evalNeeded}\n`;
-  const whyNot = document.getElementById("commEvalWhyNot") ? document.getElementById("commEvalWhyNot").value : "";
-  const barriers = document.getElementById("commEvalBarriers") ? document.getElementById("commEvalBarriers").value : "";
+  const whyNot = document.getElementById("commEvalWhyNot")
+    ? document.getElementById("commEvalWhyNot").value
+    : "";
+  const barriers = document.getElementById("commEvalBarriers")
+    ? document.getElementById("commEvalBarriers").value
+    : "";
   if (whyNot) text += `Reason (No Eval): ${whyNot}\n`;
   if (barriers) text += `Communication Barriers: ${barriers}\n`;
   text += `Communication Chart:\n${getCommChartNarrative()}\n\n`;
 
   text += `3. LIKES & DISLIKES\n`;
   text += `───────────────────────────────────────────────────────────────────\n\n`;
-  const likesActivities = document.getElementById("likesActivities") ? document.getElementById("likesActivities").value : "";
-  const likesFoods = document.getElementById("likesFoods") ? document.getElementById("likesFoods").value : "";
-  const likesPlaces = document.getElementById("likesPlaces") ? document.getElementById("likesPlaces").value : "";
-  const likesOther = document.getElementById("likesOther") ? document.getElementById("likesOther").value : "";
+  const likesActivities = document.getElementById("likesActivities")
+    ? document.getElementById("likesActivities").value
+    : "";
+  const likesFoods = document.getElementById("likesFoods")
+    ? document.getElementById("likesFoods").value
+    : "";
+  const likesPlaces = document.getElementById("likesPlaces")
+    ? document.getElementById("likesPlaces").value
+    : "";
+  const likesOther = document.getElementById("likesOther")
+    ? document.getElementById("likesOther").value
+    : "";
   text += `LIKES:\nActivities/Hobbies: ${likesActivities || "N/A"}\n`;
   text += `Favorite Foods: ${likesFoods || "N/A"}\n`;
   text += `Favorite Places: ${likesPlaces || "N/A"}\n`;
   if (likesOther) text += `Other Likes: ${likesOther}\n`;
-  const dislikesActivities = document.getElementById("dislikesActivities") ? document.getElementById("dislikesActivities").value : "";
-  const dislikesFoods = document.getElementById("dislikesFoods") ? document.getElementById("dislikesFoods").value : "";
-  const dislikesOther = document.getElementById("dislikesOther") ? document.getElementById("dislikesOther").value : "";
+  const dislikesActivities = document.getElementById("dislikesActivities")
+    ? document.getElementById("dislikesActivities").value
+    : "";
+  const dislikesFoods = document.getElementById("dislikesFoods")
+    ? document.getElementById("dislikesFoods").value
+    : "";
+  const dislikesOther = document.getElementById("dislikesOther")
+    ? document.getElementById("dislikesOther").value
+    : "";
   text += `\nDISLIKES:\nActivities/Situations: ${dislikesActivities || "N/A"}\n`;
   text += `Foods Disliked: ${dislikesFoods || "N/A"}\n`;
   if (dislikesOther) text += `Other Dislikes: ${dislikesOther}\n`;
@@ -694,7 +835,9 @@ function showToast(message, type = "info", duration = 3500) {
 function copyToClipboard() {
   navigator.clipboard
     .writeText(document.getElementById("narrativeDisplay").innerText)
-    .then(() => showToast("✅ Full PCSP Summary copied to clipboard!", "success"))
+    .then(() =>
+      showToast("✅ Full PCSP Summary copied to clipboard!", "success"),
+    )
     .catch(() => showToast("❌ Copy failed. Try again.", "error"));
 }
 
@@ -703,7 +846,11 @@ function printPlan() {
   // Ensure privacy mode is OFF so real data prints (with confirmation)
   const privacyOn = document.getElementById("privacyToggle").checked;
   if (privacyOn) {
-    if (!confirm("⚠️ HIPAA Privacy Mode is ON — the printed document will show masked placeholder values.\n\nTurn off Privacy Mode before printing if you want real data to appear.\n\nContinue printing anyway?")) {
+    if (
+      !confirm(
+        "⚠️ HIPAA Privacy Mode is ON — the printed document will show masked placeholder values.\n\nTurn off Privacy Mode before printing if you want real data to appear.\n\nContinue printing anyway?",
+      )
+    ) {
       return;
     }
   }
@@ -742,7 +889,11 @@ function exportPCSP() {
   document.body.removeChild(a);
   URL.revokeObjectURL(a.href);
 
-  showToast(`✅ Exported "${fileName}" — share or store this file securely.`, "success", 5000);
+  showToast(
+    `✅ Exported "${fileName}" — share or store this file securely.`,
+    "success",
+    5000,
+  );
 }
 
 // ─────────────────────────────────────────────
@@ -766,7 +917,10 @@ function importPCSP(event) {
 
       // Basic integrity check
       if (!data.app || data.app !== "PCSP Assistant Pro") {
-        showToast("❌ This file was not created by PCSP Assistant Pro.", "error");
+        showToast(
+          "❌ This file was not created by PCSP Assistant Pro.",
+          "error",
+        );
         return;
       }
       if (!data.formData) {
@@ -781,14 +935,22 @@ function importPCSP(event) {
 
       if (
         confirm(
-          `📂 Open plan for "${clientLabel}"?\n\nExported: ${exportedDate}\n\nThis will replace your current workspace. Continue?`
+          `📂 Open plan for "${clientLabel}"?\n\nExported: ${exportedDate}\n\nThis will replace your current workspace. Continue?`,
         )
       ) {
         restoreFormData(data.formData);
-        showToast(`✅ Plan for "${clientLabel}" loaded successfully.`, "success", 5000);
+        showToast(
+          `✅ Plan for "${clientLabel}" loaded successfully.`,
+          "success",
+          5000,
+        );
       }
     } catch (err) {
-      showToast("❌ Failed to read file. It may be corrupt or not a valid .pcsp file.", "error", 5000);
+      showToast(
+        "❌ Failed to read file. It may be corrupt or not a valid .pcsp file.",
+        "error",
+        5000,
+      );
       console.error("PCSP import error:", err);
     }
     // Reset file input so the same file can be re-opened if needed
@@ -809,15 +971,21 @@ function captureFormData() {
     if (el) formData[id] = el.value;
   });
   // Capture ethnicity checkboxes
-  const boxes = document.querySelectorAll("#ethnicityGrid input[type=checkbox]");
+  const boxes = document.querySelectorAll(
+    "#ethnicityGrid input[type=checkbox]",
+  );
   formData._ethnicityChecked = Array.from(boxes)
     .filter((cb) => cb.checked)
     .map((cb) => cb.value);
   // Capture legal reps
   formData._legalReps = captureLegalReps();
   // Capture communication method checkboxes
-  const commBoxes = document.querySelectorAll("#commMethodGrid input[type=checkbox]");
-  formData._commMethods = Array.from(commBoxes).filter(cb => cb.checked).map(cb => cb.value);
+  const commBoxes = document.querySelectorAll(
+    "#commMethodGrid input[type=checkbox]",
+  );
+  formData._commMethods = Array.from(commBoxes)
+    .filter((cb) => cb.checked)
+    .map((cb) => cb.value);
   // Capture comm chart rows and important people
   formData._commChartRows = JSON.parse(JSON.stringify(commChartRows));
   formData._importantPeople = JSON.parse(JSON.stringify(importantPeople));
@@ -834,25 +1002,43 @@ function restoreFormData(formData) {
   });
   // Restore ethnicity checkboxes
   if (Array.isArray(formData._ethnicityChecked)) {
-    const boxes = document.querySelectorAll("#ethnicityGrid input[type=checkbox]");
+    const boxes = document.querySelectorAll(
+      "#ethnicityGrid input[type=checkbox]",
+    );
     boxes.forEach((cb) => {
       cb.checked = formData._ethnicityChecked.includes(cb.value);
     });
     const otherChecked = formData._ethnicityChecked.includes("Other Ethnicity");
-    document.getElementById("ethnicityOtherGroup").style.display = otherChecked ? "" : "none";
+    document.getElementById("ethnicityOtherGroup").style.display = otherChecked
+      ? ""
+      : "none";
   }
   // Restore legal reps
   if (formData._legalReps) restoreLegalReps(formData._legalReps);
   // Restore communication method checkboxes
   if (Array.isArray(formData._commMethods)) {
-    const commBoxes = document.querySelectorAll("#commMethodGrid input[type=checkbox]");
-    commBoxes.forEach(cb => { cb.checked = formData._commMethods.includes(cb.value); });
-    const otherCb = Array.from(commBoxes).find(cb => cb.value === "Other Communication Method");
-    if (otherCb) document.getElementById("commMethodOtherGroup").style.display = otherCb.checked ? "" : "none";
+    const commBoxes = document.querySelectorAll(
+      "#commMethodGrid input[type=checkbox]",
+    );
+    commBoxes.forEach((cb) => {
+      cb.checked = formData._commMethods.includes(cb.value);
+    });
+    const otherCb = Array.from(commBoxes).find(
+      (cb) => cb.value === "Other Communication Method",
+    );
+    if (otherCb)
+      document.getElementById("commMethodOtherGroup").style.display =
+        otherCb.checked ? "" : "none";
   }
   // Restore comm chart and important people
-  if (Array.isArray(formData._commChartRows)) { commChartRows = formData._commChartRows; renderCommChart(); }
-  if (Array.isArray(formData._importantPeople)) { importantPeople = formData._importantPeople; renderImportantPeople(); }
+  if (Array.isArray(formData._commChartRows)) {
+    commChartRows = formData._commChartRows;
+    renderCommChart();
+  }
+  if (Array.isArray(formData._importantPeople)) {
+    importantPeople = formData._importantPeople;
+    renderImportantPeople();
+  }
   // Re-run toggles so conditional fields show/hide correctly
   toggleReligionOther();
   toggleInsuranceFields();
@@ -876,7 +1062,11 @@ function saveToHistory() {
   });
   localStorage.setItem("pcsp_drafts", JSON.stringify(history.slice(0, 10)));
   renderHistory();
-  showToast(`✅ Draft saved for "${name}". Reload anytime from Saved Drafts.`, "success", 4000);
+  showToast(
+    `✅ Draft saved for "${name}". Reload anytime from Saved Drafts.`,
+    "success",
+    4000,
+  );
 }
 
 // ── Render Saved Drafts List ──

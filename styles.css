@@ -12,7 +12,13 @@
 }
 
 body {
-  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-family:
+    "Inter",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    sans-serif;
   background: var(--bg-light);
   margin: 0;
   padding: 0;
@@ -35,7 +41,9 @@ body {
   display: flex;
   flex-direction: column;
   overflow-y: auto;
-  transition: transform 0.3s ease, width 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    width 0.3s ease;
   z-index: 1000;
 }
 .side-panel.right {
@@ -326,7 +334,7 @@ textarea:focus {
   border-radius: 10px;
   font-size: 14px;
   font-weight: 600;
-  box-shadow: 0 6px 24px rgba(0,0,0,0.2);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.2);
   z-index: 9999;
   opacity: 0;
   transform: translateY(20px);
@@ -337,9 +345,15 @@ textarea:focus {
   opacity: 1;
   transform: translateY(0);
 }
-.toast.success { border-left: 4px solid var(--success); }
-.toast.error   { border-left: 4px solid var(--danger); }
-.toast.info    { border-left: 4px solid var(--gold); }
+.toast.success {
+  border-left: 4px solid var(--success);
+}
+.toast.error {
+  border-left: 4px solid var(--danger);
+}
+.toast.info {
+  border-left: 4px solid var(--gold);
+}
 
 /* ── Toggle Switch ── */
 .switch {
@@ -428,7 +442,6 @@ input:checked + .slider:before {
   height: 100vh;
   overflow-y: auto;
 }
-
 
 .individual-header {
   background: var(--marion-blue);
