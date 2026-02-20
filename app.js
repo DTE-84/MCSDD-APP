@@ -80,10 +80,8 @@ const FORM_FIELDS = [
   "dentalInsurance",
   "dentalOther",
   "residencyType",
-  "residenceNotes",
   "schoolName",
   "educationStatus",
-  "gradYear",
   "employmentStatus",
   "employmentJob",
   "ispDate",
@@ -98,13 +96,14 @@ const FORM_FIELDS = [
   "techHelpers",
   "relationships",
   "communityResources",
+  "learningStyleNotes",
   "medSupport",
   "riskLevel",
   "supervisionLevel",
   "behavioralStatus",
   "oshaPrecaution",
   "evacPlan",
-  "legalStatus",
+  "limitedGuardianshipDetails",
   "rightsBrochure",
   "consents",
   "serviceSatisfaction",
@@ -184,6 +183,37 @@ function updateLearningStyles() {
 function getLearningStylesSelected() {
   const checkboxes = document.querySelectorAll(
     "#learningStyleContainer input[type=checkbox]",
+  );
+  const selected = [];
+  checkboxes.forEach((cb) => {
+    if (cb.checked) selected.push(cb.value);
+  });
+  return selected.length ? selected.join(", ") : "Not specified";
+}
+
+function updateLegalRoles() {
+  const container = document.getElementById("legalRolesContainer");
+  const checkboxes = container.querySelectorAll("input[type=checkbox]");
+  const tagContainer = document.getElementById("legalRolesTags");
+  const selected = [];
+
+  checkboxes.forEach((cb) => {
+    if (cb.checked) selected.push(cb.value);
+  });
+
+  if (selected.length === 0) {
+    tagContainer.innerHTML = '<span class="placeholder">Select Authority Roles...</span>';
+  } else {
+    tagContainer.innerHTML = selected
+      .map((s) => `<span class="selected-tag">${s}</span>`)
+      .join("");
+  }
+  updateUI();
+}
+
+function getLegalRolesSelected() {
+  const checkboxes = document.querySelectorAll(
+    "#legalRolesContainer input[type=checkbox]",
   );
   const selected = [];
   checkboxes.forEach((cb) => {
@@ -758,7 +788,6 @@ function updateUI() {
 
   text += `EDUCATION\n`;
   text += `School: ${getVal("schoolName") || "N/A"} | Status: ${getVal("educationStatus") || "N/A"}`;
-  if (getVal("gradYear")) text += ` | Year: ${getVal("gradYear")}`;
   text += `\n\n`;
 
   text += `EMPLOYMENT\n`;
@@ -875,7 +904,10 @@ function updateUI() {
   text += `Evacuation/911 Plan: ${getVal("evacPlan") || "N/A"}\n\n`;
 
   text += `7. LEGAL, RIGHTS & SATISFACTION\n`;
-  text += `Status: ${getVal("legalStatus")} | Rights Brochure: ${getVal("rightsBrochure")} | Consents: ${getVal("consents")}\n`;
+  text += `Authority: ${getLegalRolesSelected()}\n`;
+  const legalDetails = getVal("limitedGuardianshipDetails");
+  if (legalDetails) text += `Authority Details: ${legalDetails}\n`;
+  text += `Rights Brochure: ${getVal("rightsBrochure")} | Consents: ${getVal("consents")}\n`;
   text += `Service Satisfaction: ${getVal("serviceSatisfaction") || "N/A"}\n`;
   text += `Conflict of Interest Info: ${getVal("conflictInfo")}\n`;
   text += `Note: To file an anonymous complaint, contact the Office of Constituent Services at 1-800-364-9687.\n\n`;
@@ -1084,6 +1116,13 @@ function captureFormData() {
   formData._learningStyles = Array.from(lsBoxes)
     .filter((cb) => cb.checked)
     .map((cb) => cb.value);
+  // Capture legal roles
+  const lrBoxes = document.querySelectorAll(
+    "#legalRolesContainer input[type=checkbox]",
+  );
+  formData._legalRoles = Array.from(lrBoxes)
+    .filter((cb) => cb.checked)
+    .map((cb) => cb.value);
   // Capture comm chart rows and important people
   formData._commChartRows = JSON.parse(JSON.stringify(commChartRows));
   formData._importantPeople = JSON.parse(JSON.stringify(importantPeople));
@@ -1138,6 +1177,16 @@ function restoreFormData(formData) {
       cb.checked = formData._learningStyles.includes(cb.value);
     });
     updateLearningStyles();
+  }
+  // Restore legal roles checkboxes
+  if (Array.isArray(formData._legalRoles)) {
+    const lrBoxes = document.querySelectorAll(
+      "#legalRolesContainer input[type=checkbox]",
+    );
+    lrBoxes.forEach((cb) => {
+      cb.checked = formData._legalRoles.includes(cb.value);
+    });
+    updateLegalRoles();
   }
   // Restore comm chart and important people
   if (Array.isArray(formData._commChartRows)) {

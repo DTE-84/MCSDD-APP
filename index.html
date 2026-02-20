@@ -499,27 +499,24 @@
                 <option value="Graduated / Diploma Received">
                   Graduated / Diploma Received
                 </option>
-                <option value="Currently Enrolled">Currently Enrolled</option>
                 <option value="GED / HiSET Received">
                   GED / HiSET Received
                 </option>
                 <option value="Certificate of Completion">
                   Certificate of Completion
                 </option>
-                <option value="Did Not Complete">Did Not Complete</option>
+                <option value="Currently Enrolled">Currently Enrolled</option>
+                <option value="Some College">Some College</option>
+                <option value="Associate's Degree">Associate's Degree</option>
+                <option value="Bachelor's Degree">Bachelor's Degree</option>
+                <option value="Master's Degree">Master's Degree</option>
+                <option value="Doctorate Degree">Doctorate Degree</option>
                 <option value="Post-Secondary / Vocational">
                   Post-Secondary / Vocational
                 </option>
+                <option value="Did Not Complete">Did Not Complete</option>
                 <option value="Not Applicable">Not Applicable</option>
               </select>
-            </div>
-            <div class="field-group">
-              <input
-                type="text"
-                id="gradYear"
-                placeholder="e.g. 2019 or Expected 2026"
-                oninput="updateUI()"
-              />
             </div>
           </div>
 
@@ -637,7 +634,6 @@
               >
                 <option value="No">No</option>
                 <option value="Yes">Yes</option>
-                <option value="N/A">N/A</option>
               </select>
             </div>
             <div
@@ -1206,15 +1202,52 @@
           </div>
           <div class="form-grid">
             <div class="field-group">
-              <label>Legal Status</label>
-              <select id="legalStatus" onchange="updateUI()">
-                <option value="Self / Full Rights">Self / Full Rights</option>
-                <option value="Full Guardianship">Full Guardianship</option>
-                <option value="Limited Guardianship">
-                  Limited Guardianship
-                </option>
-                <option value="Power of Attorney">Power of Attorney</option>
-              </select>
+              <label>Legal Authority Roles</label>
+              <div class="multi-select-container" id="legalRolesContainer">
+                <div class="multi-select-display" onclick="toggleMultiSelect('legalRolesContainer')">
+                  <div class="selected-tags" id="legalRolesTags">
+                    <span class="placeholder">Select Authority Roles...</span>
+                  </div>
+                </div>
+                <div class="multi-select-dropdown">
+                  <label class="multi-option">
+                    <input type="checkbox" value="Self / Full Rights" onchange="updateLegalRoles()">
+                    <span>Self / Full Rights</span>
+                  </label>
+                  <label class="multi-option">
+                    <input type="checkbox" value="Full Guardianship" onchange="updateLegalRoles()">
+                    <span>Full Guardianship</span>
+                  </label>
+                  <label class="multi-option">
+                    <input type="checkbox" value="Limited Guardianship" onchange="updateLegalRoles()">
+                    <span>Limited Guardianship</span>
+                  </label>
+                  <label class="multi-option">
+                    <input type="checkbox" value="Full Conservatorship" onchange="updateLegalRoles()">
+                    <span>Full Conservatorship</span>
+                  </label>
+                  <label class="multi-option">
+                    <input type="checkbox" value="Limited Conservatorship" onchange="updateLegalRoles()">
+                    <span>Limited Conservatorship</span>
+                  </label>
+                  <label class="multi-option">
+                    <input type="checkbox" value="Power of Attorney" onchange="updateLegalRoles()">
+                    <span>Power of Attorney</span>
+                  </label>
+                  <label class="multi-option">
+                    <input type="checkbox" value="Representative Payee" onchange="updateLegalRoles()">
+                    <span>Representative Payee</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div class="field-group full">
+              <label>Limited Guardianship / Authority Details</label>
+              <textarea
+                id="limitedGuardianshipDetails"
+                placeholder="Describe specific authorities (e.g. Medical Only, Financial Only, etc.)"
+                oninput="updateUI()"
+              ></textarea>
             </div>
             <div class="field-group">
               <label>Rights Brochure Addressed?</label>
