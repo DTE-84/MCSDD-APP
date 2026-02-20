@@ -965,7 +965,7 @@
               <label>Personal Aspirations (Future Hopes & Dreams)</label>
               <textarea
                 id="aspirations"
-                placeholder="What does a 'Good Life' look like for this individual? (Include their own words)"
+                placeholder="How they will be supported with goals."
                 oninput="updateUI()"
               ></textarea>
             </div>
@@ -1037,9 +1037,61 @@
             </div>
              <div class="field-group full">
               <label>How the Individual Learns Best / Learning Style</label>
+              <div class="multi-select-container" id="learningStyleContainer">
+                <div class="multi-select-display" onclick="toggleMultiSelect('learningStyleContainer')">
+                  <div class="selected-tags" id="learningStyleTags">
+                    <span class="placeholder">Select Learning Styles...</span>
+                  </div>
+                </div>
+                <div class="multi-select-dropdown">
+                  <label class="multi-option">
+                    <input type="checkbox" value="Visual" onchange="updateLearningStyles()">
+                    <span>Visual (Pictures, Images, Spatial)</span>
+                  </label>
+                  <label class="multi-option">
+                    <input type="checkbox" value="Auditory" onchange="updateLearningStyles()">
+                    <span>Auditory (Sound, Music)</span>
+                  </label>
+                  <label class="multi-option">
+                    <input type="checkbox" value="Kinesthetic" onchange="updateLearningStyles()">
+                    <span>Kinesthetic (Physical, Touch, Hands-on)</span>
+                  </label>
+                  <label class="multi-option">
+                    <input type="checkbox" value="Reading/Writing" onchange="updateLearningStyles()">
+                    <span>Reading / Writing</span>
+                  </label>
+                  <label class="multi-option">
+                    <input type="checkbox" value="Verbal" onchange="updateLearningStyles()">
+                    <span>Verbal (Speech, Writing)</span>
+                  </label>
+                  <label class="multi-option">
+                    <input type="checkbox" value="Logical" onchange="updateLearningStyles()">
+                    <span>Logical (Mathematical, Systems)</span>
+                  </label>
+                  <label class="multi-option">
+                    <input type="checkbox" value="Social" onchange="updateLearningStyles()">
+                    <span>Social (Interpersonal, Group)</span>
+                  </label>
+                  <label class="multi-option">
+                    <input type="checkbox" value="Solitary" onchange="updateLearningStyles()">
+                    <span>Solitary (Intrapersonal, Independent)</span>
+                  </label>
+                  <label class="multi-option">
+                    <input type="checkbox" value="Observation" onchange="updateLearningStyles()">
+                    <span>Observation (Watching others)</span>
+                  </label>
+                  <label class="multi-option">
+                    <input type="checkbox" value="Modeling" onchange="updateLearningStyles()">
+                    <span>Modeling (Imitating)</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div class="field-group full">
+              <label>Learning Style Notes</label>
               <textarea
-                id="learningStyle"
-                placeholder="Learning styles include: Visual, Auditory, Kinesthetic, etc..."
+                id="learningStyleNotes"
+                placeholder="Additional details on how the individual learns best..."
                 oninput="updateUI()"
               ></textarea>
             </div>

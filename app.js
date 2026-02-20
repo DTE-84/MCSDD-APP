@@ -136,7 +136,59 @@ const FORM_FIELDS = [
   "dislikesActivities",
   "dislikesFoods",
   "dislikesOther",
+  "religiousSupports",
+  "learningStyleNotes",
+  "supportSection",
+  "culturalDifferences",
 ];
+
+// ── Custom Multi-Select logic ──
+function toggleMultiSelect(containerId) {
+  const container = document.getElementById(containerId);
+  container.classList.toggle("active");
+
+  // Close when clicking outside
+  const closeHandler = (e) => {
+    if (!container.contains(e.target)) {
+      container.classList.remove("active");
+      document.removeEventListener("click", closeHandler);
+    }
+  };
+  setTimeout(() => {
+    document.addEventListener("click", closeHandler);
+  }, 10);
+}
+
+function updateLearningStyles() {
+  const container = document.getElementById("learningStyleContainer");
+  const checkboxes = container.querySelectorAll("input[type=checkbox]");
+  const tagContainer = document.getElementById("learningStyleTags");
+  const selected = [];
+
+  checkboxes.forEach((cb) => {
+    if (cb.checked) selected.push(cb.value);
+  });
+
+  if (selected.length === 0) {
+    tagContainer.innerHTML = '<span class="placeholder">Select Learning Styles...</span>';
+  } else {
+    tagContainer.innerHTML = selected
+      .map((s) => `<span class="selected-tag">${s}</span>`)
+      .join("");
+  }
+  updateUI();
+}
+
+function getLearningStylesSelected() {
+  const checkboxes = document.querySelectorAll(
+    "#learningStyleContainer input[type=checkbox]",
+  );
+  const selected = [];
+  checkboxes.forEach((cb) => {
+    if (cb.checked) selected.push(cb.value);
+  });
+  return selected.length ? selected.join(", ") : "Not specified";
+}
 
 // ─────────────────────────────────────────────
 //  COMMUNICATION SECTION helpers
@@ -775,7 +827,10 @@ function updateUI() {
   text += `Previous Goals Progress: ${getVal("prevGoals") || "N/A"}\n`;
   text += `Strengths/Assets: ${getVal("strengths") || "N/A"}\n`;
   text += `Technology/Support: Tech (${getVal("techHelpers") || "None"}), Relationships (${getVal("relationships") || "None"})\n`;
-  text += `Community Resources: ${getVal("communityResources") || "N/A"}\n\n`;
+  text += `Community Resources: ${getVal("communityResources") || "N/A"}\n`;
+  text += `Learning Style: ${getLearningStylesSelected()}\n`;
+  if (getVal("learningStyleNotes")) text += `Learning Notes: ${getVal("learningStyleNotes")}\n`;
+  text += `\n`;
 
   text += `6. HEALTH, SAFETY & RISK\n`;
   text += `Medication/Diet/Mobility: ${getVal("medSupport") || "Standard per profile."}\n`;
@@ -986,6 +1041,13 @@ function captureFormData() {
   formData._commMethods = Array.from(commBoxes)
     .filter((cb) => cb.checked)
     .map((cb) => cb.value);
+  // Capture learning styles
+  const lsBoxes = document.querySelectorAll(
+    "#learningStyleContainer input[type=checkbox]",
+  );
+  formData._learningStyles = Array.from(lsBoxes)
+    .filter((cb) => cb.checked)
+    .map((cb) => cb.value);
   // Capture comm chart rows and important people
   formData._commChartRows = JSON.parse(JSON.stringify(commChartRows));
   formData._importantPeople = JSON.parse(JSON.stringify(importantPeople));
@@ -1029,6 +1091,16 @@ function restoreFormData(formData) {
     if (otherCb)
       document.getElementById("commMethodOtherGroup").style.display =
         otherCb.checked ? "" : "none";
+  }
+  // Restore learning styles checkboxes
+  if (Array.isArray(formData._learningStyles)) {
+    const lsBoxes = document.querySelectorAll(
+      "#learningStyleContainer input[type=checkbox]",
+    );
+    lsBoxes.forEach((cb) => {
+      cb.checked = formData._learningStyles.includes(cb.value);
+    });
+    updateLearningStyles();
   }
   // Restore comm chart and important people
   if (Array.isArray(formData._commChartRows)) {
