@@ -1424,4 +1424,17 @@ function deleteDraft(id) {
 }
 
 // ── Boot ──
+function toggleTheme() {
+  const currentTheme = document.documentElement.getAttribute("data-theme");
+  const newTheme = currentTheme === "dark" ? "light" : "dark";
+  document.documentElement.setAttribute("data-theme", newTheme);
+  localStorage.setItem("pcsp_theme", newTheme);
+}
+
+function initTheme() {
+  const savedTheme = localStorage.getItem("pcsp_theme") || "light";
+  document.documentElement.setAttribute("data-theme", savedTheme);
+}
+
 init();
+initTheme();

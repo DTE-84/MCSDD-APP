@@ -9,6 +9,18 @@
   --border: #d1d9e0;
   --text-main: #2c3e50;
   --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  --header-bg: #fff;
+}
+
+[data-theme="dark"] {
+  --bg-light: #1a1a1a;
+  --border: #333333;
+  --text-main: #e0e0e0;
+  --marion-blue: #4d94ff;
+  --marion-blue-light: #66a3ff;
+  --gold: #d4b47a;
+  --shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  --header-bg: #1e1e1e;
 }
 
 body {
@@ -24,6 +36,9 @@ body {
   padding: 0;
   color: var(--text-main);
   line-height: 1.5;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
 }
 
 .app-container {
@@ -32,38 +47,33 @@ body {
   height: 100vh;
   overflow: hidden;
   transition: grid-template-columns 0.3s ease;
+  background: var(--bg-light);
 }
 
 /* ── Sidebar & History Panels ── */
 .side-panel {
-  background: white;
+  background: var(--header-bg);
   border-right: 1px solid var(--border);
   display: flex;
   flex-direction: column;
   overflow-y: auto;
   transition:
     transform 0.3s ease,
-    width 0.3s ease;
+    width 0.3s ease,
+    background-color 0.3s ease,
+    border-color 0.3s ease;
   z-index: 1000;
 }
 .side-panel.right {
   border-right: none;
   border-left: 1px solid var(--border);
 }
-.panel-header {
-  padding: 20px;
-  background: var(--marion-blue);
-  color: white;
-  font-weight: bold;
-  font-size: 14px;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
-}
+
 .panel-content {
   padding: 15px;
+  background: var(--header-bg);
 }
 
-/* ── Resource Cards ── */
 .resource-card {
   background: var(--bg-light);
   border: 1px solid var(--border);
@@ -72,6 +82,47 @@ body {
   margin-bottom: 12px;
   cursor: pointer;
   transition: all 0.2s ease;
+}
+
+[data-theme="dark"] .form-section {
+  background: #1e1e1e;
+  border-color: #333;
+}
+
+[data-theme="dark"] .main-workspace {
+  background: #121212;
+}
+
+[data-theme="dark"] input,
+[data-theme="dark"] select,
+[data-theme="dark"] textarea {
+  background: #2a2a2a;
+  color: #e0e0e0;
+  border-color: #444;
+}
+
+[data-theme="dark"] .output-section {
+  background: #1e1e1e;
+}
+
+[data-theme="dark"] #narrativeDisplay {
+  background: #2a2a2a;
+  color: #e0e0e0;
+  border-color: #444;
+}
+
+[data-theme="dark"] .individual-header {
+  background: #1e1e1e;
+  border-color: #333;
+}
+
+[data-theme="dark"] .history-item:hover {
+  background: #2d2d2d;
+}
+
+[data-theme="dark"] .privacy-banner {
+  background: #1a2a3a;
+  color: #4d94ff;
 }
 .resource-card:hover {
   border-color: var(--marion-blue);
@@ -674,7 +725,7 @@ input:checked + .slider:before {
  } 
  
  . m u l t i - s e l e c t - d i s p l a y : : a f t e r   { 
-     c o n t e n t :   ' �%' ; 
+     c o n t e n t :   ' �%' ; 
      f o n t - s i z e :   1 0 p x ; 
      c o l o r :   # 9 9 9 ; 
      t r a n s i t i o n :   t r a n s f o r m   0 . 3 s   e a s e ; 
