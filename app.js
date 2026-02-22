@@ -37,24 +37,24 @@ const data = {
 // ── Local Resources ──
 const resources = [
   {
-    name: "Mark Twain Behavioral Health",
+    name: "Mark Twain Behavior Health",
     info: "Crisis: (800) 356-5395",
     contact: "Hannibal Office",
   },
   {
     name: "Douglass Community Services",
     info: "Food/Utility Assistance",
-    contact: "573-221-3892",
+    contact: "(573) 221-3892",
   },
   {
     name: "OATS Transit",
     info: "Transportation Marion Co.",
-    contact: "800-269-6287",
+    contact: "(800) 269-6287",
   },
   {
     name: "NECAC Marion County",
     info: "Housing & Support",
-    contact: "573-221-7166",
+    contact: "(573) 221-7166",
   },
 ];
 
@@ -139,14 +139,6 @@ const FORM_FIELDS = [
   "dpTeaching",
   "dpLiftingCriteria",
   "dpMonitoring",
-  ];
-
-  // ── Due Process Toggle ──
-  function toggleDueProcess(cb) {
-  const container = document.getElementById("dueProcessFields");
-  container.style.display = cb.checked ? "none" : "";
-  updateUI();
-  }
   "serviceSatisfaction",
   "conflictInfo",
   "contributors",
@@ -183,6 +175,13 @@ const FORM_FIELDS = [
   "supportSection",
   "culturalDifferences",
 ];
+
+// ── Due Process Toggle ──
+function toggleDueProcess(cb) {
+  const container = document.getElementById("dueProcessFields");
+  container.style.display = cb.checked ? "none" : "";
+  updateUI();
+}
 
 // ── Custom Multi-Select logic ──
 function toggleMultiSelect(containerId) {
