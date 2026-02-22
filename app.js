@@ -211,7 +211,8 @@ function updateLearningStyles() {
   });
 
   if (selected.length === 0) {
-    tagContainer.innerHTML = '<span class="placeholder">Select Learning Styles...</span>';
+    tagContainer.innerHTML =
+      '<span class="placeholder">Select Learning Styles...</span>';
   } else {
     tagContainer.innerHTML = selected
       .map((s) => `<span class="selected-tag">${s}</span>`)
@@ -242,7 +243,8 @@ function updateLegalRoles() {
   });
 
   if (selected.length === 0) {
-    tagContainer.innerHTML = '<span class="placeholder">Select Authority Roles...</span>';
+    tagContainer.innerHTML =
+      '<span class="placeholder">Select Authority Roles...</span>';
   } else {
     tagContainer.innerHTML = selected
       .map((s) => `<span class="selected-tag">${s}</span>`)
@@ -273,7 +275,8 @@ function updateHealthParams() {
   });
 
   if (selected.length === 0) {
-    tagContainer.innerHTML = '<span class="placeholder">Select Parameters...</span>';
+    tagContainer.innerHTML =
+      '<span class="placeholder">Select Parameters...</span>';
   } else {
     tagContainer.innerHTML = selected
       .map((s) => `<span class="selected-tag">${s}</span>`)
@@ -329,7 +332,9 @@ function toggleCommChartNA(cb) {
   const attached = document.getElementById("commChartAttached");
   if (cb.checked) {
     if (commChartRows.length > 0) {
-      if (confirm("Checking N/A will clear all existing chart entries. Continue?")) {
+      if (
+        confirm("Checking N/A will clear all existing chart entries. Continue?")
+      ) {
         commChartRows = [];
         renderCommChart();
       } else {
@@ -910,7 +915,7 @@ function updateUI() {
     : "";
   if (whyNot) text += `Reason (No Eval): ${whyNot}\n`;
   if (barriers) text += `Communication Barriers: ${barriers}\n`;
-  
+
   text += `Communication Chart: `;
   if (document.getElementById("commChartNA").checked) {
     text += `Not Applicable\n`;
@@ -963,14 +968,19 @@ function updateUI() {
   text += `Former Goals & Progress: ${getVal("prevGoals") || "N/A"}\n`;
   text += `Support Strategies: ${getVal("supportNeeded") || "N/A"}\n`;
   text += `Strengths/Assets: ${getVal("strengths") || "N/A"}\n`;
-  if (getVal("maasTools")) text += `Assessment Limitations (MAAS/Vineland): ${getVal("maasTools")}\n`;
+  if (getVal("maasTools"))
+    text += `Assessment Limitations (MAAS/Vineland): ${getVal("maasTools")}\n`;
   text += `Rituals & Routines: ${getVal("ritualsRoutines") || "Not specified"}\n`;
   text += `Religious Supports: ${getVal("religiousSupports") || "None identified"}\n`;
-  if (getVal("staffPreference")) text += `Staff Preferences: ${getVal("staffPreference")}\n`;
-  if (getVal("otherSupport")) text += `Aspects of Life (School/Work/Home): ${getVal("otherSupport")}\n`;
+  if (getVal("staffPreference"))
+    text += `Staff Preferences: ${getVal("staffPreference")}\n`;
+  if (getVal("otherSupport"))
+    text += `Aspects of Life (School/Work/Home): ${getVal("otherSupport")}\n`;
   text += `Learning Style: ${getLearningStylesSelected()}\n`;
-  if (getVal("learningStyleNotes")) text += `Learning Notes: ${getVal("learningStyleNotes")}\n`;
-  if (getVal("culturalDifferences")) text += `Cultural Differences: ${getVal("culturalDifferences")}\n`;
+  if (getVal("learningStyleNotes"))
+    text += `Learning Notes: ${getVal("learningStyleNotes")}\n`;
+  if (getVal("culturalDifferences"))
+    text += `Cultural Differences: ${getVal("culturalDifferences")}\n`;
   text += `Water Temp Regulation: ${getVal("waterTemp")}\n`;
   text += `\n`;
 
@@ -978,12 +988,14 @@ function updateUI() {
   text += `Diagnosis: ${getVal("diagnosis") || "N/A"}\n`;
   text += `Personal Outcomes: ${getVal("personalOutcomes") || "N/A"}\n`;
   text += `HRST Status: ${getVal("hrstStatus")} | Telehealth: ${getVal("telehealth")}\n`;
-  if (getVal("medHistory")) text += `Medical History/Stressors: ${getVal("medHistory")}\n`;
-  
+  if (getVal("medHistory"))
+    text += `Medical History/Stressors: ${getVal("medHistory")}\n`;
+
   text += `BEHAVIORAL RISK & PREVENTION\n`;
   text += `ATSC Involved: ${getVal("atscInvolved")} | Status: ${getVal("behavioralStatus")}\n`;
-  if (getVal("crisisPlan")) text += `Crisis Safety Plan: ${getVal("crisisPlan")}\n`;
-  
+  if (getVal("crisisPlan"))
+    text += `Crisis Safety Plan: ${getVal("crisisPlan")}\n`;
+
   text += `HOME LIFE & COMMUNITY SAFETY (HCBS)\n`;
   text += `Housing Choice: ${getVal("housingChoice") || "N/A"}\n`;
   text += `Privacy: ${getVal("housingPrivacy") || "N/A"} | Lease: ${getVal("leaseAgreement")}\n`;
@@ -992,15 +1004,18 @@ function updateUI() {
 
   text += `MEDICAL PROVIDERS & VISITS\n`;
   text += `PCP: ${getVal("pcpName") || "N/A"} | Specialists: ${getVal("specialists") || "None listed"}\n`;
-  if (getVal("preventionDiet")) text += `Prevention/Screenings: ${getVal("preventionDiet")}\n`;
+  if (getVal("preventionDiet"))
+    text += `Prevention/Screenings: ${getVal("preventionDiet")}\n`;
   text += `Medications: ${getVal("medicationDetails") || "N/A"}\n`;
-  if (getVal("psychotropicProtocol")) text += `PRN Psychotropic Protocol: ${getVal("psychotropicProtocol")}\n`;
+  if (getVal("psychotropicProtocol"))
+    text += `PRN Psychotropic Protocol: ${getVal("psychotropicProtocol")}\n`;
   text += `Self-Admin Status: ${getVal("selfAdmin")} | Parameters Tracked: ${getHealthParamsSelected()}\n`;
   text += `Health Risks: ${getVal("healthRisks") || "N/A"}\n`;
   text += `DNR/CPR Status: ${getVal("dnrStatus")} | Supervision: ${getVal("supervisionLevel")}\n`;
   text += `Risk Level: ${getVal("riskLevel")} | Behavioral: ${getVal("behavioralStatus")}\n`;
   text += `OSHA: ${getVal("oshaPrecaution")} | Evacuation: ${getVal("evacPlan") || "N/A"}\n`;
-  if (getVal("allergies")) text += `Allergies/Sensitivities: ${getVal("allergies")}\n`;
+  if (getVal("allergies"))
+    text += `Allergies/Sensitivities: ${getVal("allergies")}\n`;
   text += `\n`;
 
   text += `7. LEGAL, RIGHTS & SATISFACTION\n`;
@@ -1010,7 +1025,7 @@ function updateUI() {
   text += `Rights Brochure: ${getVal("rightsBrochure")} | Consents: ${getVal("consents")}\n`;
   text += `Service Satisfaction: ${getVal("serviceSatisfaction") || "N/A"}\n`;
   text += `Conflict of Interest Info: ${getVal("conflictInfo")}\n`;
-  
+
   text += `Rights Limitations & Due Process: `;
   if (document.getElementById("dueProcessNA").checked) {
     text += `None active.\n`;
